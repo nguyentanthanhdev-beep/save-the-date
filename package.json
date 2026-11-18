@@ -1,0 +1,10 @@
+{
+  "name": "save-the-date",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Thiệp cưới online — Minimalism Đỏ Đậm (HTML/CSS/JS thuần)",
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs"
+  }
+}

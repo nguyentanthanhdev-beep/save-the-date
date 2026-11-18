@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Thiệp Cưới Minimalism Đỏ Đậm</title>
+  <meta name="description" content="Thiệp cưới online phong cách tối giản, tông đỏ đô sang trọng.">
+  <meta name="theme-color" content="#511419">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Ms+Madi&family=The+Nautigal:wght@400;700&family=Viaoda+Libre&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="locked">
+
+<!-- ===================== SVG sprite (hoa, lá, tim…) ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="rose-shade" cx=".5" cy=".5" r=".5">
+      <stop offset=".55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".32"/>
+    </radialGradient>
+    <radialGradient id="seal-grad" cx=".35" cy=".3" r=".85">
+      <stop offset="0" stop-color="#f3dc92"/>
+      <stop offset=".55" stop-color="#c9a24a"/>
+      <stop offset="1" stop-color="#8f6a1f"/>
+    </radialGradient>
+
+    <!-- hoa hồng: màu theo biến CSS --r1..--r4, --rs -->
+    <g id="rose-shape">
+      <g fill="var(--r1)">
+        <ellipse cx="0" cy="-18" rx="16" ry="19"/>
+        <ellipse cx="0" cy="-18" rx="16" ry="19" transform="rotate(60)"/>
+        <ellipse cx="0" cy="-18" rx="16" ry="19" transform="rotate(120)"/>
+        <ellipse cx="0" cy="-18" rx="16" ry="19" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-18" rx="16" ry="19" transform="rotate(240)"/>
+        <ellipse cx="0" cy="-18" rx="16" ry="19" transform="rotate(300)"/>
+      </g>
+      <circle r="23" fill="var(--r2)"/>
+      <g fill="var(--r3)">
+        <ellipse cx="0" cy="-10" rx="10" ry="13"/>
+        <ellipse cx="0" cy="-10" rx="10" ry="13" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-10" rx="10" ry="13" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-10" rx="10" ry="13" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-10" rx="10" ry="13" transform="rotate(288)"/>
+      </g>
+      <circle r="10" fill="var(--r4)"/>
+      <path d="M-1 0a3.5 3.5 0 1 1 3.5 3.5a7 7 0 1 1-7-7a10.5 10.5 0 1 1 10.5 10.5" fill="none" stroke="var(--rs)" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M-22 -10A25 25 0 0 1 -6 -24M22 8A25 25 0 0 1 8 22M-24 10A26 26 0 0 0 -8 25" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.2" stroke-linecap="round"/>
+      <circle r="34" fill="url(#rose-shade)"/>
+    </g>
+
+    <!-- hoa nhỏ 5 cánh -->
+    <g id="bloom-shape">
+      <g fill="#f4ece0" stroke="rgba(150,120,90,.35)" stroke-width=".8">
+        <ellipse cx="0" cy="-9" rx="6" ry="9"/>
+        <ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(288)"/>
+      </g>
+      <circle r="3.2" fill="#c9a24a"/>
+    </g>
+
+    <!-- lá -->
+    <g id="leaf-shape">
+      <path d="M0 0C9-13 30-15 46 0C30 15 9 13 0 0Z"/>
+      <path d="M2 0H40" fill="none" stroke="rgba(0,0,0,.22)" stroke-width="1"/>
+    </g>
+
+    <!-- cụm hoa trang trí (viewBox 0 0 240 380) -->
+    <g id="flora-g">
+      <g fill="none" stroke="#6b4a3a" stroke-width="2" stroke-linecap="round">
+        <path d="M120 372C112 290 100 205 84 95C80 65 76 42 70 16"/>
+        <path d="M92 130C80 108 64 98 50 72"/>
+        <path d="M88 104C100 86 112 74 126 52"/>
+        <path d="M84 158C66 148 52 148 38 130"/>
+        <path d="M79 70C70 62 62 50 60 36"/>
+      </g>
+      <g fill="#7a2a33">
+        <circle cx="70" cy="16" r="5"/><circle cx="60" cy="36" r="4.5"/><circle cx="50" cy="72" r="5"/>
+        <circle cx="126" cy="52" r="4.5"/><circle cx="38" cy="130" r="4.5"/><circle cx="108" cy="66" r="3.5"/>
+      </g>
+      <g fill="#a54a52">
+        <circle cx="62" cy="22" r="3"/><circle cx="46" cy="64" r="3"/><circle cx="118" cy="58" r="3"/><circle cx="44" cy="124" r="3"/>
+      </g>
+      <use href="#leaf-shape" transform="translate(114 340) rotate(-150) scale(1.5)" fill="#7e8a63"/>
+      <use href="#leaf-shape" transform="translate(112 312) rotate(-30) scale(1.4)" fill="#9aa47c"/>
+      <use href="#leaf-shape" transform="translate(104 262) rotate(-168) scale(1.25)" fill="#8a9570"/>
+      <use href="#leaf-shape" transform="translate(150 292) rotate(18) scale(1.35)" fill="#a3ab86"/>
+      <use href="#leaf-shape" transform="translate(122 226) rotate(-22) scale(1.1)" fill="#8a9570"/>
+      <use href="#leaf-shape" transform="translate(92 178) rotate(-142) scale(1.05)" fill="#9aa47c"/>
+      <use href="#leaf-shape" transform="translate(96 118) rotate(-60) scale(.8)" fill="#7e8a63"/>
+      <use href="#rose-shape" transform="translate(116 288) scale(1.38)" style="--r1:#5a1520;--r2:#7b2430;--r3:#922f3c;--r4:#6b1a26;--rs:rgba(30,0,6,.5)"/>
+      <use href="#rose-shape" transform="translate(80 208) scale(1.02) rotate(25)" style="--r1:#661a26;--r2:#8a2c39;--r3:#a8434f;--r4:#7a2230;--rs:rgba(30,0,6,.45)"/>
+      <use href="#rose-shape" transform="translate(152 218) scale(.78) rotate(-12)" style="--r1:#cbb48a;--r2:#e4d3b0;--r3:#f1e5cb;--r4:#d9c39a;--rs:rgba(120,90,50,.45)"/>
+      <use href="#bloom-shape" transform="translate(176 282) scale(1)"/>
+      <use href="#bloom-shape" transform="translate(52 266) scale(.8) rotate(20)"/>
+      <use href="#bloom-shape" transform="translate(118 176) scale(.7) rotate(-15)"/>
+    </g>
+
+    <!-- icon cho lịch trình (nét 1.6, màu theo currentColor) -->
+    <g id="ic-camera" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 8h3l1.6-2.4h6.8L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+      <circle cx="12" cy="13" r="3.6"/>
+    </g>
+    <g id="ic-dish" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 17h18M5 17a7 7 0 0 1 14 0"/><path d="M12 10V8.3M10.6 8.3h2.8"/>
+    </g>
+    <g id="ic-cake" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 20h16v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M4 16c2 1.6 3.4 1.6 4.8 0 1.4 1.6 2.8 1.6 4.4 0 1.4 1.6 2.8 1.6 4.4 0 .8.6 1.4 1 2.4 1"/>
+      <path d="M12 12V8M12 5.2c.8.8.8 1.8 0 2.6-.8-.8-.8-1.8 0-2.6z"/>
+    </g>
+
+    <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+    <symbol id="wand" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M5 19L16.5 7.5M14 5l1-2 1 2 2 1-2 1-1 2-1-2-2-1zM19 12l.7-1.4.7 1.4 1.4.7-1.4.7-.7 1.4-.7-1.4-1.4-.7z"/></symbol>
+    <symbol id="nav" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M3 11.5L21 3l-8.5 18-2-7.5z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ===================== BÌA THIỆP (phong bì) ===================== -->
+<div class="cover" id="cover" role="dialog" aria-modal="true" aria-label="Thiệp mời">
+  <div class="petals" id="petals" aria-hidden="true"></div>
+  <div class="cover-card" id="coverCard">
+    <svg class="flora cover-flora cover-flora--l" viewBox="0 0 240 380" aria-hidden="true"><use href="#flora-g"/></svg>
+    <svg class="flora cover-flora cover-flora--r" viewBox="0 0 240 380" aria-hidden="true"><use href="#flora-g"/></svg>
+
+    <div class="cover-heart"><svg aria-hidden="true"><use href="#heart"/></svg></div>
+    <h1 class="cover-names">
+      <span data-bind="groom.name"></span>
+      <span class="cover-amp">&amp;</span>
+      <span data-bind="bride.name"></span>
+    </h1>
+    <div class="cover-orn" aria-hidden="true"><i></i><b>❦</b><i></i></div>
+    <p class="cover-date" data-bind="view.coverDate"></p>
+    <p class="cover-inv">Thân Mời</p>
+    <p class="cover-guest" id="guestName" hidden></p>
+    <button class="btn btn--wine" id="openBtn" type="button">Mở thiệp</button>
+  </div>
+</div>
+
+<!-- ===================== TRANG THIỆP ===================== -->
+<main class="page" id="page">
+
+  <!-- Hero: phong bì + polaroid + tên -->
+  <header class="hero">
+    <p class="save">Save the date</p>
+
+    <div class="envelope reveal">
+      <div class="env-art">
+        <div class="env-flap"></div>
+        <div class="env-body"><i class="env-l"></i><i class="env-r"></i><i class="env-b"></i></div>
+      </div>
+      <div class="polaroid"><img data-photo="0" alt="Ảnh cưới" draggable="false"></div>
+      <svg class="seal" viewBox="0 0 80 80" aria-hidden="true">
+        <circle cx="40" cy="40" r="35" fill="url(#seal-grad)"/>
+        <circle cx="40" cy="40" r="28" fill="none" stroke="#8f6a1f" stroke-opacity=".5" stroke-width="1.5"/>
+        <path d="M40 54l-2.6-2.4C30 44.9 26 41.3 26 36.7 26 33 28.8 30 32.4 30c2.2 0 4.2 1 5.6 2.7 1.4-1.7 3.4-2.7 5.6-2.7 3.6 0 6.4 3 6.4 6.7 0 4.6-4 8.2-11.4 14.9z" fill="none" stroke="#7a5412" stroke-width="2.2" stroke-linejoin="round"/>
+      </svg>
+      <svg class="flora env-flora" viewBox="0 0 240 380" aria-hidden="true"><use href="#flora-g"/></svg>
+    </div>
+
+    <div class="names reveal">
+      <p data-bind="groom.name"></p>
+      <span class="names-amp" aria-hidden="true">&amp;</span>
+      <p data-bind="bride.name"></p>
+    </div>
+
+    <div class="castle castle--hero" aria-hidden="true"></div>
+  </header>
+
+  <!-- Thông tin lễ cưới -->
+  <section class="card card--ceremony reveal" aria-labelledby="t-ceremony">
+    <svg class="flora card-flora card-flora--r" viewBox="0 0 240 380" aria-hidden="true"><use href="#flora-g"/></svg>
+    <div class="card-in">
+      <h2 class="card-title" id="t-ceremony">Thông tin lễ cưới</h2>
+
+      <div class="parents">
+        <div class="parent">
+          <span class="parent-title" data-bind="groom.parents.title"></span>
+          <b data-bind="groom.parents.father"></b>
+          <b data-bind="groom.parents.mother"></b>
+          <small data-bind="groom.parents.address"></small>
+        </div>
+        <i class="parents-line" aria-hidden="true"></i>
+        <div class="parent">
+          <span class="parent-title" data-bind="bride.parents.title"></span>
+          <b data-bind="bride.parents.father"></b>
+          <b data-bind="bride.parents.mother"></b>
+          <small data-bind="bride.parents.address"></small>
+        </div>
+      </div>
+
+      <p class="invite">Trân trọng báo tin<br>lễ thành hôn của con chúng tôi</p>
+
+      <div class="couple">
+        <p class="couple-name" data-bind="groom.fullName"></p>
+        <p class="couple-role" data-bind="view.groomRole"></p>
+        <span class="couple-amp" aria-hidden="true">&amp;</span>
+        <p class="couple-name" data-bind="bride.fullName"></p>
+        <p class="couple-role" data-bind="view.brideRole"></p>
+      </div>
+
+      <p class="held">Lễ thành hôn được cử hành tại</p>
+      <p class="held-place" data-bind="view.ceremonyPlace"></p>
+
+      <div class="when-row">
+        <span data-bind="view.ceremonyAt"></span>
+        <span data-bind="view.ceremonyWeekday"></span>
+      </div>
+      <div class="bigdate">
+        <span class="bigdate-day" data-bind="view.ceremonyDay"></span>
+        <i aria-hidden="true"></i>
+        <span class="bigdate-my"><span data-bind="view.ceremonyMonth"></span><span data-bind="view.ceremonyYear"></span></span>
+      </div>
+      <p class="lunar" data-bind="view.ceremonyLunar"></p>
+    </div>
+  </section>
+
+  <!-- Album ảnh -->
+  <section class="album reveal" aria-labelledby="t-album">
+    <div class="castle castle--album" aria-hidden="true"></div>
+    <h2 class="sec-title" id="t-album">Album ảnh</h2>
+    <div class="stage" id="albumStage" aria-roledescription="carousel" aria-label="Album ảnh cưới">
+      <button class="nav nav--prev" id="albumPrev" type="button" aria-label="Ảnh trước"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="nav nav--next" id="albumNext" type="button" aria-label="Ảnh sau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div class="dots" id="albumDots" role="tablist" aria-label="Chọn ảnh"></div>
+  </section>
+
+  <!-- Thông tin tiệc cưới + lịch -->
+  <section class="card card--party reveal" aria-labelledby="t-party">
+    <svg class="flora card-flora card-flora--l" viewBox="0 0 240 380" aria-hidden="true"><use href="#flora-g"/></svg>
+    <div class="card-in">
+      <h2 class="card-title" id="t-party">Thông tin tiệc cưới</h2>
+      <p class="invite invite--sm">Tiệc cưới sẽ diễn ra vào lúc:</p>
+
+      <div class="when-row">
+        <span data-bind="party.start"></span>
+        <span data-bind="view.partyWeekday"></span>
+      </div>
+      <div class="bigdate">
+        <span class="bigdate-day" data-bind="view.partyDay"></span>
+        <i aria-hidden="true"></i>
+        <span class="bigdate-my"><span data-bind="view.partyMonth"></span><span data-bind="view.partyYear"></span></span>
+      </div>
+      <p class="lunar" data-bind="view.partyLunar"></p>
+
+      <div class="times">
+        <div><span>Đón khách</span><b data-bind="party.doorsOpen"></b></div>
+        <div><span>Khai tiệc</span><b data-bind="party.start"></b></div>
+      </div>
+
+      <div class="calendar" id="calendar" aria-label="Lịch tháng tổ chức tiệc"></div>
+
+      <button class="link-btn" id="addCal" type="button">Thêm vào lịch</button>
+      <button class="btn btn--cream" id="rsvpBtn" type="button">Xác nhận tham dự</button>
+    </div>
+  </section>
+
+  <!-- Địa điểm -->
+  <section class="venue reveal" aria-labelledby="t-venue">
+    <div class="castle castle--venue" aria-hidden="true"></div>
+    <h2 class="sec-title sec-title--sm" id="t-venue">Tiệc cưới sẽ tổ chức tại</h2>
+    <p class="venue-addr"><span data-bind="party.venueName"></span>, <span data-bind="party.address"></span></p>
+    <div class="map">
+      <iframe id="mapFrame" title="Bản đồ địa điểm tiệc cưới" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    </div>
+    <a class="directions" id="directions" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#nav"/></svg>
+      <span>Chỉ đường</span>
+    </a>
+  </section>
+
+  <!-- Dress code -->
+  <section class="dress reveal" aria-labelledby="t-dress">
+    <h2 class="sec-title sec-title--sm" id="t-dress">Dress code</h2>
+    <p class="dress-note" data-bind="dressCode.note"></p>
+    <div class="swatches" id="swatches"></div>
+  </section>
+
+  <!-- Lịch trình -->
+  <section class="card card--timeline reveal" aria-labelledby="t-timeline">
+    <svg class="flora card-flora card-flora--r2" viewBox="0 0 240 380" aria-hidden="true"><use href="#flora-g"/></svg>
+    <div class="card-in">
+      <h2 class="card-title card-title--lg" id="t-timeline">Lịch trình ngày cưới</h2>
+      <ol class="timeline" id="timeline"></ol>
+    </div>
+  </section>
+
+  <!-- Sổ lưu bút -->
+  <section class="guestbook reveal" aria-labelledby="t-gb">
+    <div class="gb-card">
+      <svg class="flora gb-flora" viewBox="0 0 240 380" aria-hidden="true"><use href="#flora-g"/></svg>
+      <h2 class="gb-title" id="t-gb">Sổ lưu bút</h2>
+      <form id="wishForm" autocomplete="off" novalidate>
+        <input class="field" id="wishName" name="name" type="text" placeholder="Nhập tên*" maxlength="60" required aria-label="Tên của bạn">
+        <textarea class="field" id="wishText" name="text" placeholder="Nhập lời chúc*" maxlength="400" required aria-label="Lời chúc"></textarea>
+        <div class="gb-actions">
+          <button class="wand" id="wishWand" type="button" title="Gợi ý lời chúc" aria-label="Gợi ý lời chúc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wand"/></svg></button>
+          <button class="btn btn--wine btn--sm" type="submit">Gửi lời chúc</button>
+        </div>
+      </form>
+    </div>
+    <div class="wishes" id="wishes" aria-live="polite"></div>
+  </section>
+
+  <!-- Hộp quà mừng -->
+  <section class="gift reveal" aria-labelledby="t-gift">
+    <h2 class="sec-title sec-title--sm" id="t-gift">Hộp quà mừng</h2>
+    <button class="giftbox" id="giftBtn" type="button" aria-haspopup="dialog">
+      <span class="spark spark--1">✦</span><span class="spark spark--2">✦</span>
+      <span class="spark spark--3">✦</span><span class="spark spark--4">✦</span>
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <g class="gb-lid">
+          <rect x="14" y="40" width="92" height="20" rx="3" fill="#7b2430"/>
+          <rect x="54" y="40" width="12" height="20" fill="#c9a24a"/>
+          <path d="M60 40C48 22 26 22 30 34c3 8 22 6 30 6zM60 40C72 22 94 22 90 34c-3 8-22 6-30 6z" fill="none" stroke="#c9a24a" stroke-width="5" stroke-linejoin="round"/>
+        </g>
+        <rect x="20" y="60" width="80" height="48" rx="3" fill="#511419"/>
+        <rect x="54" y="60" width="12" height="48" fill="#c9a24a"/>
+      </svg>
+      <small>Nhấn để mở</small>
+    </button>
+  </section>
+
+  <footer class="foot">
+    <p data-bind="footer.message"></p>
+    <small data-bind="footer.credit"></small>
+    <div class="castle castle--foot" aria-hidden="true"></div>
+  </footer>
+</main>
+
+<!-- ===================== Nút nhạc ===================== -->
+<button class="music" id="musicBtn" type="button" aria-label="Bật/tắt nhạc nền" hidden>
+  <span></span><span></span><span></span><span></span>
+</button>
+
+<!-- ===================== Hộp thoại ===================== -->
+<dialog class="dlg" id="rsvpDialog" aria-labelledby="rsvpTitle">
+  <form id="rsvpForm" autocomplete="off">
+    <button class="dlg-x" type="button" data-close aria-label="Đóng">×</button>
+    <h3 id="rsvpTitle">Xác nhận tham dự</h3>
+    <label>Họ và tên*<input class="field" name="name" type="text" required maxlength="60"></label>
+    <fieldset>
+      <legend>Bạn sẽ…</legend>
+      <label class="radio"><input type="radio" name="status" value="yes" checked> Tham dự</label>
+      <label class="radio"><input type="radio" name="status" value="maybe"> Chưa chắc</label>
+      <label class="radio"><input type="radio" name="status" value="no"> Rất tiếc, không đến được</label>
+    </fieldset>
+    <label>Số người đi cùng
+      <select class="field" name="guests">
+        <option value="1">1 người</option><option value="2">2 người</option>
+        <option value="3">3 người</option><option value="4">4 người</option><option value="5">5 người</option>
+      </select>
+    </label>
+    <button class="btn btn--wine" type="submit">Gửi xác nhận</button>
+  </form>
+</dialog>
+
+<dialog class="dlg dlg--gift" id="giftDialog" aria-labelledby="giftTitle">
+  <button class="dlg-x" type="button" data-close aria-label="Đóng">×</button>
+  <h3 id="giftTitle">Hộp quà mừng</h3>
+  <p class="dlg-sub">Quét mã QR hoặc chuyển khoản theo thông tin bên dưới.</p>
+  <div class="gift-grid" id="giftGrid"></div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/vietqr.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
