@@ -128,7 +128,7 @@
       cover.classList.add('is-open');
       document.body.classList.remove('locked');
       window.scrollTo(0, 0);
-      startMusic();
+      music.start();
       startReveal();
       carousel.start();
       setTimeout(function () {
@@ -261,15 +261,34 @@
     });
   }
 
-  /* ---------- Album: carousel 3D ---------- */
+  /* ---------- Album: carousel 3D (chuyển động liên tục, tự chạy, kéo bám tay) ---------- */
   const carousel = (function () {
     const stage = $('#albumStage');
     const dotsBox = $('#albumDots');
     const n = photos.length;
-    let cur = 0;
-    let timer = null;
+
+    const INTERVAL = 3600;                 // dừng giữa 2 lần tự chuyển (ms)
+    const TWEEN_MS = reduceMotion ? 1 : 1200;
+    const STEP = 0.64;                     // khoảng cách 2 ảnh liền kề (theo bề rộng 1 ảnh)
+
+    let pos = 0;                           // vị trí số thực: ảnh i nằm giữa khi pos = i
+    let tween = null;
     let slides = [];
     let dots = [];
+    let raf = 0;
+    let last = 0;
+    let idle = 0;
+    let visible = true;                    // khung album đang nằm trong màn hình
+    let started = false;                   // đã mở thiệp
+    let dragging = false;
+    let drag = null;
+    let activeIdx = -1;
+
+    const mod = (v) => ((v % n) + n) % n;
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const smooth = (k) => k * k * k * (k * (6 * k - 15) + 10);       // smootherstep: vào/ra rất êm
+    const autoOn = () => started && n > 1 && !reduceMotion;
+    const slideW = () => (stage.clientHeight * 0.92) / 1.5;
 
     function build() {
       slides = photos.map((src, i) => {
@@ -282,7 +301,6 @@
         img.alt = `Ảnh cưới ${i + 1}`;
         img.draggable = false;
         el.appendChild(img);
-        el.addEventListener('click', () => { if (i !== cur) go(i); });
         stage.appendChild(el);
         return el;
       });
@@ -297,57 +315,139 @@
       });
     }
 
-    function layout() {
+    /* Mỗi ảnh được đặt theo khoảng cách (số thực) tới vị trí hiện tại → chuyển động liên tục.
+       Ảnh ở xa nhất (đang vòng qua mép) mờ hẳn đi nên không còn cảnh "bay" ngang khung. */
+    function apply() {
+      const half = n / 2;
+      const fadeFrom = Math.max(0.3, Math.min(half - 1.2, half * 0.6));
       slides.forEach((el, i) => {
-        let d = i - cur;
-        if (d > n / 2) d -= n;
-        if (d < -n / 2) d += n;
-        el.style.setProperty('--d', d);
-        el.style.setProperty('--abs', Math.abs(d));
-        el.classList.toggle('is-active', d === 0);
-        el.dataset.hidden = Math.abs(d) > 3 ? '1' : '';
-        el.setAttribute('aria-hidden', d === 0 ? 'false' : 'true');
+        const d = mod(i - pos + half) - half;                // quãng ngắn nhất trên vòng tròn
+        const a = Math.abs(d);
+        const s = d < 0 ? -1 : 1;
+        const x = s * (Math.min(a, 1) * 64 + clamp(a - 1, 0, 1) * 50 + Math.max(a - 2, 0) * 36);
+        const rot = -clamp(d, -2.2, 2.2) * 38;
+        const scale = 1 - Math.min(a, 3) * 0.1;
+        const op = a <= fadeFrom ? 1 : clamp((half - a) / (half - fadeFrom), 0, 1);
+        el.style.transform =
+          `translateX(-50%) translateX(${x.toFixed(2)}%) rotateY(${rot.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
+        el.style.opacity = op.toFixed(3);
+        el.style.zIndex = String(100 - Math.round(a * 10));
+        el.style.pointerEvents = op > 0.3 ? 'auto' : 'none';
+        el.style.setProperty('--abs', a.toFixed(3));
       });
-      dots.forEach((b, i) => b.classList.toggle('on', i === cur));
+      const idx = mod(Math.round(pos));
+      if (idx !== activeIdx) {
+        activeIdx = idx;
+        slides.forEach((el, i) => {
+          el.classList.toggle('is-active', i === idx);
+          el.setAttribute('aria-hidden', i === idx ? 'false' : 'true');
+        });
+        dots.forEach((b, i) => b.classList.toggle('on', i === idx));
+      }
     }
 
-    function go(i) { cur = (i + n) % n; layout(); restart(); }
-    const next = () => go(cur + 1);
-    const prev = () => go(cur - 1);
-
-    function start() {
-      if (reduceMotion || n < 2 || timer) return;
-      timer = setInterval(() => { cur = (cur + 1) % n; layout(); }, 3800);
+    function frame(t) {
+      raf = 0;
+      const dt = Math.min(100, t - (last || t));
+      last = t;
+      if (tween) {
+        const k = clamp((t - tween.t0) / tween.dur, 0, 1);
+        pos = tween.from + (tween.to - tween.from) * smooth(k);
+        if (k >= 1) { pos = mod(tween.to); tween = null; idle = 0; }
+        apply();
+      } else if (!dragging && autoOn() && visible && !document.hidden) {
+        idle += dt;
+        if (idle >= INTERVAL) { idle = 0; goTo(Math.round(pos) + 1); }
+      }
+      if (tween || dragging || (autoOn() && visible && !document.hidden)) raf = requestAnimationFrame(frame);
     }
-    function stop() { clearInterval(timer); timer = null; }
-    function restart() { if (timer) { stop(); start(); } }
+    function ensureLoop() { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }
+
+    function goTo(target, dur) {
+      tween = { from: pos, to: target, t0: performance.now(), dur: dur == null ? TWEEN_MS : dur };
+      idle = 0;
+      ensureLoop();
+    }
+    const base = () => (tween ? tween.to : Math.round(pos));
+    function step(dir) { goTo(base() + dir); }
+    function go(i) {                                          // tới ảnh i theo đường ngắn nhất
+      const b = base();
+      const delta = mod(i - b + n / 2) - n / 2;
+      if (delta !== 0) goTo(b + delta, TWEEN_MS + (Math.abs(delta) - 1) * 250);
+    }
+
+    /* kéo bằng chuột / vuốt: ảnh bám theo tay, thả ra có quán tính rồi tự căn về ảnh gần nhất */
+    function onDown(e) {
+      if (n < 2 || e.target.closest('.nav')) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true;
+      tween = null;
+      drag = { id: e.pointerId, x0: e.clientX, pos0: pos, moved: false, samples: [{ t: performance.now(), x: e.clientX }] };
+      ensureLoop();
+    }
+    function onMove(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x0;
+      if (!drag.moved && Math.abs(dx) > 6) {
+        drag.moved = true;
+        stage.classList.add('is-dragging');
+        try { stage.setPointerCapture(e.pointerId); } catch (_) { /* bỏ qua */ }
+      }
+      if (!drag.moved) return;
+      pos = drag.pos0 - dx / (slideW() * STEP);
+      drag.samples.push({ t: performance.now(), x: e.clientX });
+      if (drag.samples.length > 6) drag.samples.shift();
+      apply();
+    }
+    function onUp(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      const d = drag;
+      drag = null;
+      dragging = false;
+      stage.classList.remove('is-dragging');
+      try { stage.releasePointerCapture(e.pointerId); } catch (_) { /* bỏ qua */ }
+      idle = 0;
+      if (!d.moved) {                                         // chỉ chạm: bấm vào ảnh bên cạnh thì chuyển tới ảnh đó
+        const el = e.target.closest && e.target.closest('.slide');
+        if (el) go(slides.indexOf(el));
+        ensureLoop();
+        return;
+      }
+      const a = d.samples[0];
+      const b = d.samples[d.samples.length - 1];
+      const v = b.t > a.t ? (b.x - a.x) / (b.t - a.t) : 0;    // px/ms
+      const cur = Math.round(pos);
+      const target = clamp(Math.round(pos - (v * 120) / (slideW() * STEP)), cur - 2, cur + 2);
+      goTo(target, 650 + Math.abs(target - pos) * 180);
+    }
 
     function init() {
       build();
-      layout();
-      $('#albumPrev').addEventListener('click', prev);
-      $('#albumNext').addEventListener('click', next);
+      apply();
+      $('#albumPrev').addEventListener('click', () => step(-1));
+      $('#albumNext').addEventListener('click', () => step(1));
 
-      // vuốt
-      let x0 = null;
-      stage.addEventListener('pointerdown', (e) => { x0 = e.clientX; });
-      stage.addEventListener('pointerup', (e) => {
-        if (x0 == null) return;
-        const dx = e.clientX - x0;
-        x0 = null;
-        if (Math.abs(dx) > 40) (dx < 0 ? next : prev)();
-      });
-      stage.addEventListener('pointercancel', () => { x0 = null; });
+      stage.addEventListener('pointerdown', onDown);
+      stage.addEventListener('pointermove', onMove);
+      stage.addEventListener('pointerup', onUp);
+      stage.addEventListener('pointercancel', onUp);
 
       stage.tabIndex = 0;
       stage.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
-        if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
       });
-      stage.addEventListener('mouseenter', stop);
-      stage.addEventListener('mouseleave', () => { if (!document.body.classList.contains('locked')) start(); });
-      document.addEventListener('visibilitychange', () => { document.hidden ? stop() : (!document.body.classList.contains('locked') && start()); });
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          visible = entries[0].isIntersecting;
+          if (visible) ensureLoop();
+        }, { threshold: 0.15 }).observe(stage);
+      }
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) ensureLoop(); });
     }
+
+    function start() { started = true; idle = 0; ensureLoop(); }
     return { init: init, start: start };
   })();
 
@@ -505,23 +605,69 @@
   }
 
   /* ---------- Nhạc nền ---------- */
-  let audio = null;
-  function initMusic() {
-    if (!C.music || !C.music.src) return;
+  /* Có 2 nguồn nhạc: file mp3 riêng (config.music.src) hoặc nhạc tự tổng hợp (js/music.js). */
+  const music = (function () {
     const btn = $('#musicBtn');
-    btn.hidden = false;
-    audio = new Audio(C.music.src);
-    audio.loop = true;
-    audio.preload = 'none';
-    btn.addEventListener('click', () => {
-      if (audio.paused) audio.play().then(() => btn.classList.add('playing'), () => {});
-      else { audio.pause(); btn.classList.remove('playing'); }
-    });
-  }
-  function startMusic() {
-    if (!audio) return;
-    audio.play().then(() => $('#musicBtn').classList.add('playing'), () => {});
-  }
+    const cfg = C.music || {};
+    const PREF = 'std.music.pref';
+    let engine = null;
+    let resumeOnShow = false;
+
+    if (cfg.src) {
+      const audio = new Audio(cfg.src);
+      audio.loop = true;
+      audio.preload = 'none';
+      audio.volume = cfg.volume != null ? cfg.volume : 0.7;
+      engine = {
+        play: () => audio.play(),
+        pause: () => audio.pause(),
+        isPlaying: () => !audio.paused
+      };
+    } else if (cfg.synth !== false && window.SynthMusic) {
+      engine = window.SynthMusic.create({ volume: cfg.volume != null ? cfg.volume : 0.5 });
+    }
+
+    const readPref = () => { try { return localStorage.getItem(PREF); } catch (e) { return null; } };
+    const writePref = (v) => { try { localStorage.setItem(PREF, v); } catch (e) { /* bỏ qua */ } };
+
+    function sync() {
+      const on = engine.isPlaying();
+      btn.classList.toggle('playing', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.title = on ? 'Tắt nhạc' : 'Bật nhạc';
+    }
+    function play() {
+      const p = engine.play();
+      sync();
+      if (p && p.then) p.then(sync, () => { sync(); toast('Trình duyệt chặn phát nhạc, hãy bấm vào biểu tượng loa'); });
+    }
+
+    function init() {
+      if (!engine) return;
+      btn.hidden = false;
+      sync();
+      btn.addEventListener('click', () => {
+        if (engine.isPlaying()) { engine.pause(); writePref('off'); sync(); }
+        else { writePref('on'); play(); }
+      });
+      // tạm dừng khi chuyển tab / khoá màn hình, tự phát lại khi quay lại
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          if (engine.isPlaying()) { resumeOnShow = true; engine.pause(); sync(); }
+        } else if (resumeOnShow) {
+          resumeOnShow = false;
+          play();
+        }
+      });
+    }
+
+    // gọi khi khách bấm "Mở thiệp" (thao tác của người dùng nên trình duyệt cho phép phát)
+    function start() {
+      if (!engine || readPref() === 'off') return;
+      play();
+    }
+    return { init: init, start: start };
+  })();
 
   /* ---------- Ánh sáng lung linh: quầng sáng / bokeh / sao ---------- */
   const rnd = (a, b) => a + Math.random() * (b - a);
@@ -590,7 +736,7 @@
   initGuestbook();
   initRsvp();
   initGift();
-  initMusic();
+  music.init();
   initCover();
   initCoverSparkles();
   initCardSparkles();

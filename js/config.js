@@ -76,8 +76,14 @@ window.WEDDING = {
   photos: [],
   photoCount: 7,                   // số ảnh minh hoạ khi photos = []
 
-  /* Nhạc nền (để trống '' để ẩn nút nhạc). Vd: 'assets/music/song.mp3' */
-  music: { src: '' },
+  /*
+   * Nhạc nền, phát khi khách bấm "Mở thiệp" (có nút bật/tắt ở góc dưới bên phải).
+   *  - src: để trống '' → dùng nhạc tự tổng hợp sẵn (Canon in D, js/music.js).
+   *         điền đường dẫn mp3, vd 'assets/music/song.mp3' → dùng bài của bạn.
+   *  - synth: false → tắt hẳn nhạc tự tổng hợp (khi src trống thì không có nhạc).
+   *  - volume: 0 → 1 (mặc định 0.5 cho nhạc tổng hợp, 0.7 cho file mp3).
+   */
+  music: { src: '', synth: true, volume: 0.5 },
 
   /* Lời chúc mẫu hiện sẵn trong sổ lưu bút (ago = số phút trước) */
   wishes: [

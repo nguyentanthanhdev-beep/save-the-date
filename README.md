@@ -21,7 +21,8 @@ Mọi thông tin nằm trong [`js/config.js`](js/config.js): tên cô dâu chú 
 | Muốn làm gì | Làm thế nào |
 |---|---|
 | Dùng ảnh thật | Bỏ ảnh vào `assets/photos/` rồi điền `photos: ['assets/photos/1.jpg', …]`. Ảnh đầu tiên cũng là ảnh polaroid trong phong bì. Hiện đang dùng ảnh minh hoạ tự sinh. |
-| Thêm nhạc nền | Đặt file `.mp3` vào `assets/music/` rồi điền `music: { src: 'assets/music/song.mp3' }`. Nút nhạc chỉ hiện khi có `src`. Nhạc bắt đầu khi khách bấm "Mở thiệp". |
+| Nhạc nền | Mặc định đã có nhạc: bản "Canon in D" tự tổng hợp bằng Web Audio ([`js/music.js`](js/music.js), không cần file, không dính bản quyền), tự phát khi khách bấm "Mở thiệp", có nút bật/tắt ở góc dưới bên phải. Muốn dùng bài của bạn: đặt file `.mp3` vào `assets/music/` rồi điền `music: { src: 'assets/music/song.mp3' }`. Muốn tắt hẳn nhạc: `music: { synth: false }`. Chỉnh âm lượng bằng `volume` (0–1). |
+| Album ảnh | Tự chuyển ảnh mỗi ~3,6 giây (tạm dừng khi khung album ra khỏi màn hình hoặc đổi tab), kéo/vuốt để chuyển, có phím ← →. Tự tắt tự chạy nếu thiết bị bật "giảm chuyển động". |
 | Tên khách trên bìa | Thêm `?to=Tên Khách` vào link, ví dụ `index.html?to=Anh Minh`. |
 | QR mừng cưới | Điền `bin` (mã ngân hàng NAPAS), số tài khoản, tên chủ tài khoản. Mã QR VietQR được tạo ngay trên trình duyệt. |
 | Đổi màu | Sửa các biến `--wine`, `--wine-2`, `--gold`, `--cream`, `--paper` ở đầu [`css/styles.css`](css/styles.css). |
